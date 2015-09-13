@@ -1,0 +1,117 @@
+<HTML> 
+	<head> 
+		<title>Connect Four</title> 
+		<style type="text/css"> 
+		/* Thanks to woot.com for the css. */
+	
+		.closex {
+			background-color: #0FB314;
+			position:absolute;
+			left:50%;
+			top:42%;
+			width:36px;
+			height:18px;
+		    margin-left:176px;
+		    margin-top:-157px;
+			z-index: 2;
+			font: 11px 'Trebuchet MS';
+			padding: 0;
+			outline: 0;
+			color:#fff;
+			opacity: .8; filter: alpha(opacity=80);
+		}
+		.announcement {
+	        border:solid 10px #0FB314;
+	        font:14px 'Trebuchet MS', sans-serif;
+		    position:absolute;
+		    left:50%;
+		    top:42%;
+		    width:410px;
+		    margin-left:-205px;
+		    margin-top:-170px;
+			background-color: #fff;
+			z-index: 1;
+			opacity: .8; filter: alpha(opacity=80);
+			box-shadow: 2px 2px 10px rgba(5,7,5,.8);
+			-webkit-box-shadow: 2px 2px 10px rgba(5,7,5,.8);
+			-moz-box-shadow: 2px 2px 10px rgba(5,7,5,.8);
+		}
+        .announcement h2 {
+			background-color:#232323;
+			color:#fff;
+			margin:0;
+			padding:20px;
+        }
+        .announcement p {
+			padding:5px 20px;
+        }
+body {
+background: url(../bg_body.png) 0 0 repeat;
+}
+
+        </style> 
+	</head> 
+<!-- Start of Google Analytics Code -->
+<script type="text/javascript">
+
+if (Worker) {
+	window.location = "v2.html";
+}
+
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18753820-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<!-- End of Google Analytics Code -->
+	<body bgcolor="white" onload="onLoad()"> 
+		<div id="boardBackground" Style="position:absolute; top:21px; Left:21px; Width:575px; Height:503px; BACKGROUND-COLOR:black; box-shadow: 1px 1px 5px rgba(17,17,51,1); -webkit-box-shadow: 1px 1px 5px rgba(17,17,51,1); -moz-box-shadow: 1px 1px 5px rgba(17,17,51,1);"></div>
+		<div id="textdiv"></div> 
+		<div id="animation"></div>
+
+		<form name="optionsForm"  Style="position:absolute; top:530px; Left:265px;"> 
+			<input type="button" name="button2" onclick="javascript:newGame()" value="New Game" style="color: white; background-Color:#232323;  padding:5px, 2px, 5px, 2px; border: solid 1px black; font: 14px 'Trebuchet MS'; box-shadow: 1px 1px 5px rgba(20,20,20,1); -webkit-box-shadow: 1px 1px 5px rgba(20,20,20,1); -moz-box-shadow: 1px 1px 5px rgba(20,20,20,1);">
+		</form>
+
+		<IMG STYLE="position:absolute; TOP:20px; LEFT:20px; WIDTH:576px; HEIGHT:504px" SRC="Link4.png"> 
+		<div id="uhOhMessages" Style="color: white; position:absolute; top:2px; Left:150px; Width:430px; OVERFLOW: hidden; border: 0 none; outline: 0; padding: 0; margin: 0;">
+		</div> 
+ 
+		<div id="Column1" onclick="javascript:moveFast(1)" Style="position:absolute; top:46px; Left:46px; Width:81px; Height:450px; BACKGROUND-COLOR: #FFF;opacity: .0; filter: alpha(opacity=00); OVERFLOW: hidden"></div> 
+		<div id="Column2" onclick="javascript:moveFast(2)" Style="position:absolute; top:46px; Left:128px; Width:71px; Height:450px; BACKGROUND-COLOR: #44D; opacity: .0; filter: alpha(opacity=00); OVERFLOW: hidden"></div> 
+		<div id="Column3" onclick="javascript:moveFast(3)" Style="position:absolute; top:46px; Left:200px; Width:71px; Height:450px; BACKGROUND-COLOR: #D4D; opacity: .0; filter: alpha(opacity=00); OVERFLOW: hidden"></div> 
+		<div id="Column4" onclick="javascript:moveFast(4)" Style="position:absolute; top:46px; Left:272px; Width:71px; Height:450px; BACKGROUND-COLOR: #4DD; opacity: .0; filter: alpha(opacity=00); OVERFLOW: hidden"></div> 
+		<div id="Column5" onclick="javascript:moveFast(5)" Style="position:absolute; top:46px; Left:344px; Width:71px; Height:450px; BACKGROUND-COLOR: #DDD; opacity: .0; filter: alpha(opacity=00); OVERFLOW: hidden"></div> 
+		<div id="Column6" onclick="javascript:moveFast(6)" Style="position:absolute; top:46px; Left:416px; Width:71px; Height:450px; BACKGROUND-COLOR: #ABD; opacity: .0; filter: alpha(opacity=00); OVERFLOW: hidden"></div> 
+		<div id="Column7" onclick="javascript:moveFast(7)" Style="position:absolute; top:46px; Left:488px; Width:81px; Height:450px; BACKGROUND-COLOR: #4BB; opacity: .0; filter: alpha(opacity=00); OVERFLOW: hidden"></div> 
+		<div id="popup"></div>
+		<script type="text/javascript" src="Link4.js"></script> 
+		<script type="text/javascript"> 
+			var board = [0,0,0,0,0,0,0,0];
+			board[1] = [0,0,0,0,0,0,0];
+			board[2] = [0,0,0,0,0,0,0];
+			board[3] = [0,0,0,0,0,0,0];
+			board[4] = [0,0,0,0,0,0,0];
+			board[5] = [0,0,0,0,0,0,0];
+			board[6] = [0,0,0,0,0,0,0];
+			board[7] = [0,0,0,0,0,0,0];
+			/* board[x][y] board is top right on a graph.*/
+			var whosTurn = 1;
+			/* Starting difficulty is on the line below. don't set above 10.*/
+			var aiIterations = 1;
+			var boardOffset = 20;
+display(board);
+			var totalWins;
+			var totalLosses;
+		
+		</script> 
+
+	</body> 
+</HTML> 
