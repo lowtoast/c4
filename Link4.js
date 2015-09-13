@@ -1,27 +1,38 @@
 function onLoad()
 {
-	popupMessage("Welcome","Welcome to connect four by Alex & Vince. It's an easy game that gets harder with each win. Winning is as easy as linking 4 pieces vertically, horizontally, or diagonally before I do. You get to make the first move and have white pieces. Don't forget that columns are affected by gravity. While you can click anywhere on the board the piece will always fall to the lowest possible spot. Good luck."," I'm ready when you are. Click a column to place a move!");	
+    popupMessage("Welcome","Welcome to connect four by Alex & Vince. It's an easy game that gets harder with each win. Winning is as easy as linking 4 pieces vertically, horizontally, or diagonally before I do. You get to make the first move and have white pieces. Don't forget that columns are affected by gravity. While you can click anywhere on the board the piece will always fall to the lowest possible spot. Good luck."," I'm ready when you are. Click a column to place a move!");	
 }
+
 
 
 
 
 function moveFast(moveColumn)
 {
-    if (moveColumn < 1 && moveColumn > 7)
-        {document.getElementById("uhOhMessages").innerHTML = "Move must be between 1 and 7."; return(37707);}
-    if (board[1][6] !== 0 && board[2][6] !== 0 && board[3][6] !== 0 && board[4][6] !== 0 && board[5][6] !== 0 && board[6][6] !== 0 && board[7][6] !== 0)
-		{document.getElementById("uhOhMessages").innerHTML = "Cats game! Stop trying to move already."; return(23423);}
-	if (board[moveColumn][6] !== 0)
-        {document.getElementById("uhOhMessages").innerHTML = "Column is full, please choose another column."; return(2343);}
-    if (whosTurn === 3)
-        {document.getElementById("uhOhMessages").innerHTML = "Game is over. Why are you trying to move?"; return(234);}
-	if (whosTurn === 2)
-		{document.getElementById("uhOhMessages").innerHTML = "Not your turn. Please wait, I'm thinking."; return(234);}
-document.getElementById("popup").innerHTML="";
+    if (moveColumn < 1 && moveColumn > 7){
+        document.getElementById("uhOhMessages").innerHTML = "Move must be between 1 and 7.";
+        return(37707);
+    }
+    if (board[1][6] !== 0 && board[2][6] !== 0 && board[3][6] !== 0 && board[4][6] !== 0 && board[5][6] !== 0 && board[6][6] !== 0 && board[7][6] !== 0){
+        document.getElementById("uhOhMessages").innerHTML = "Cats game! Stop trying to move already.";
+        return(23423);
+    }
+	if (board[moveColumn][6] !== 0){
+        document.getElementById("uhOhMessages").innerHTML = "Column is full, please choose another column.";
+        return(2343);
+    }
+    if (whosTurn === 3){
+        document.getElementById("uhOhMessages").innerHTML = "Game is over. Why are you trying to move?";
+        return(234);
+    }
+	if (whosTurn === 2){
+        document.getElementById("uhOhMessages").innerHTML = "Not your turn. Please wait, I'm thinking.";
+        return(234);
+    }
+    document.getElementById("popup").innerHTML="";
     drop(moveColumn);
     document.getElementById("uhOhMessages").innerHTML = "";
-	if (checkForWin(moveColumn) === true){
+    if (checkForWin(moveColumn) === true){
 		aiIterations=aiIterations+1;
 		if (whosTurn === 1){
 			popupMessage("You Win!", "Congrats! You've beat level "+(aiIterations-1)+" and have been bumped up to the next level, level "+ aiIterations +"!", "Celebrate! Then come back and play again.");
@@ -84,7 +95,6 @@ function computerMove(moveColumn)
     if (tmpAIMove === 0){tmpAIMove = aiMoveManager(aiIterations-37);}
     if (tmpAIMove === 0){tmpAIMove = aiMoveManager(aiIterations-38);}
     if (tmpAIMove === 0){tmpAIMove = aiMoveManager(aiIterations-39);}
-
      drop(tmpAIMove);
      if (checkForWin(tmpAIMove) === true){
 		if (whosTurn === 1){
@@ -113,9 +123,8 @@ function newGame()
 		}
 	}
 	display(board);
-popupMessage("New Game", "You are playing connect four on level "+aiIterations+". If you beat a level you'll be bumped up. There are 10 levels; see how far you can get!", "Good Luck! Click the board to play your first move.");
-
-var tmprandomnumber=Math.floor(Math.random()*(2));
+    popupMessage("New Game", "You are playing connect four on level "+aiIterations+". If you beat a level you'll be bumped up. There are 10 levels; see how far you can get!", "Good Luck! Click the board to play your first move.");
+    var tmprandomnumber=Math.floor(Math.random()*(2));
 	if (tmprandomnumber===1){ 
 		whosTurn=2; 
 		if (aiIterations < 8){
@@ -138,7 +147,6 @@ function aiMoveManager(tmpIterations)
     var tmpList = [-1,0,0,0,0,0,0,0];
     tmpList = eliminateFullColumns(tmpBoard, tmpList); /* list of columns available for moving into */
     var tmpRatioList = [0,0,0,0,0,0,0,0];
-    
     if (tmpList[1] === -1 && tmpList[2] === -1 && tmpList[3] === -1 && tmpList[4] === -1 && tmpList[5] === -1 && tmpList[6] === -1 && tmpList[7] === -1) {return false;} 
     var tmpRowList = giveRowList(tmpBoard, tmpList); /* proper row corisponding to open columns */
     for (var count = 1; count <=7; count++){
@@ -164,7 +172,6 @@ function aiMoveManager(tmpIterations)
             tmpList[count] = aiMovep1(tmpIterations-1, tmpBoard);
             tmpBoard[count][tmpRowList[count]] = 0;
 			tmpRatioList[count] = totalWins/totalLosses;
-			/* console.log("column: " + count + " contains " + totalWins + " wins and " + totalLosses + " losses. Ratio: " + totalWins/totalLosses); */
             }
 		} 
 	}
@@ -179,7 +186,7 @@ function aiMoveManager(tmpIterations)
 	/* this does a couple of things. firstly this check if its the last chance at a move. if it is it forces a random move. */
 	/* then it selects a move at random from a list of approved moves */
 	/* lastly it ... */
-/* console.log("Move Options: " + tmpSelectFromList); */
+    /* console.log("Move Options: " + tmpSelectFromList); */
 	if (tmpSelectFromList.length === 1 && tmpIterations === 0){ /* if there is no good moves. force pick a bad one at random */
         tmpList = eliminateFullColumns(tmpBoard, tmpList); /* list of columns available for moving into */
         tmpSelectFromList = [0];
@@ -193,21 +200,21 @@ function aiMoveManager(tmpIterations)
         return(tmpSelectFromList[randomnumber]);
 	}
 	
-/* select the highest ratio value as a move */
+    /* select the highest ratio value as a move */
 	var tmpHigh = 0;
 	var tmpHighColumn = 0;
 	for (var count = 1; count <= 7; count ++){
-			if (tmpList[count]===0){
+       if (tmpList[count]===0){
 			if (tmpRatioList[count] > tmpHigh){ tmpHigh = tmpRatioList[count]; tmpHighColumn = count;}
-	}}
+	   }
+    }
 	if (tmpHighColumn > 0){return tmpHighColumn;}
 	var randomnumber=Math.floor(Math.random()*(tmpSelectFromList.length -1));
 	randomnumber = randomnumber + 1;
 	if (tmpSelectFromList.length === 1){
     	return(0);
 	}	
-	return(tmpSelectFromList[randomnumber]);
-	
+	return(tmpSelectFromList[randomnumber]);	
 }
 
 
@@ -222,21 +229,19 @@ function aiMovep2(tmpIterations,tmpBoard)
         return 0;
     } else {
         var tmpRowList = giveRowList(tmpBoard, tmpList); /* proper row corisponding to open columns */
-        for (var count = 1; count <=7; count++)
-        {
-            if (tmpList[count] === 0)
-            {
+        for (var count = 1; count <=7; count++){
+            if (tmpList[count] === 0){
                 tmpBoard[count][tmpRowList[count]] = 2;
-                	if (aiCheckForWin(tmpBoard, count, 2) === true){totalWins=totalWins+1;tmpBoard[count][tmpRowList[count]] = 0;return 1;}
-			if (tmpIterations > 1){
-				tmpList[count] = aiMovep1(tmpIterations-1, tmpBoard);
-            		if (tmpList[count] === 1){totalWins=totalWins+8;tmpBoard[count][tmpRowList[count]] = 0;return 1;}
-			}
-			tmpBoard[count][tmpRowList[count]] = 0;
-		}
+                if (aiCheckForWin(tmpBoard, count, 2) === true){totalWins=totalWins+1;tmpBoard[count][tmpRowList[count]] = 0;return 1;}
+                if (tmpIterations > 1){
+				    tmpList[count] = aiMovep1(tmpIterations-1, tmpBoard);
+            	   if (tmpList[count] === 1){totalWins=totalWins+8;tmpBoard[count][tmpRowList[count]] = 0;return 1;}
+                }
+                tmpBoard[count][tmpRowList[count]] = 0;
+            }
         }
-	if (tmpList[1] === -1 && tmpList[2] === -1 && tmpList[3] === -1 && tmpList[4] === -1 && tmpList[5] === -1 && tmpList[6] === -1 && tmpList[7] === -1) { return -1;}
-    	}
+	   if (tmpList[1] === -1 && tmpList[2] === -1 && tmpList[3] === -1 && tmpList[4] === -1 && tmpList[5] === -1 && tmpList[6] === -1 && tmpList[7] === -1) { return -1;}
+    }
     return 0;
 }
 
@@ -252,22 +257,28 @@ function aiMovep1(tmpIterations, tmpBoard)
         return 0;
     } else {
         var tmpRowList = giveRowList(tmpBoard, tmpList); /* proper row corisponding to open columns */
-        for (var count = 1; count <=7; count++)
-        {
-            if (tmpList[count] === 0)
-            {
-                tmpBoard[count][tmpRowList[count]] = 1;
-                if (aiCheckForWin(tmpBoard, count, 1) === true){totalLosses=totalLosses+1;tmpBoard[count][tmpRowList[count]] = 0;return -1;}
+        for (var count = 1; count <=7; count++){
+			if (tmpList[count] === 0){
+				tmpBoard[count][tmpRowList[count]] = 1;
+                if (aiCheckForWin(tmpBoard, count, 1) === true){
+					totalLosses=totalLosses+1;
+					tmpBoard[count][tmpRowList[count]] = 0;
+					return -1;
+				}
                 if (tmpIterations > 1){
-                    tmpList[count] = aiMovep2(tmpIterations-1, tmpBoard);
-                		if (tmpList[count] === -1){totalLosses=totalLosses+1;tmpBoard[count][tmpRowList[count]] = 0;return -1;}
-			}
-			
+                	tmpList[count] = aiMovep2(tmpIterations-1, tmpBoard);
+					if (tmpList[count] === -1){
+						totalLosses=totalLosses+1;
+						tmpBoard[count][tmpRowList[count]] = 0;
+						return -1;
+					}
+				}
                 tmpBoard[count][tmpRowList[count]] = 0;
             }
-        }
-    		if ((tmpList[1] === -1 || tmpList[1] === 1) && (tmpList[2] === -1 || tmpList[2] === 1) && (tmpList[3] === -1 || tmpList[3] === 1) && (tmpList[4] === -1 || tmpList[4] === 1) && (tmpList[5] === -1 || tmpList[5] === 1) && (tmpList[6] === -1 || tmpList[6] === 1) && (tmpList[7] === -1 || tmpList[7] === 1)) { return 1;}
-
+		}
+    	if ((tmpList[1] === -1 || tmpList[1] === 1) && (tmpList[2] === -1 || tmpList[2] === 1) && (tmpList[3] === -1 || tmpList[3] === 1) && (tmpList[4] === -1 || tmpList[4] === 1) && (tmpList[5] === -1 || tmpList[5] === 1) && (tmpList[6] === -1 || tmpList[6] === 1) && (tmpList[7] === -1 || tmpList[7] === 1)) {
+			return 1;
+		}
 	}
     return 0;
 }
@@ -384,7 +395,7 @@ function display(tmpBoard)
            
             }
     }
-document.getElementById("textdiv").innerHTML = tmpGenerateBoard;
+	document.getElementById("textdiv").innerHTML = tmpGenerateBoard;
 }
 
 
@@ -409,8 +420,8 @@ function clearPopup()
 
 function drop(tmpColumn)
 {
-var tmpRow;
-   if (board[tmpColumn][1] === 0){
+	var tmpRow;
+	if (board[tmpColumn][1] === 0){
         board[tmpColumn][1] = whosTurn; tmpRow = 1;  
     } else if (board[tmpColumn][2] === 0){
         board[tmpColumn][2] = whosTurn; tmpRow = 2;
@@ -423,11 +434,10 @@ var tmpRow;
     } else if (board[tmpColumn][6] === 0){
         board[tmpColumn][6] = whosTurn; tmpRow = 6;
     }
-            var tmpX = (tmpColumn*72) - 36 + boardOffset;
-		/* if a browser doesn't like a negative starting value change it back to positive 36. */
-		var tmpY = -36;
-		var tmpFinalD = (432-tmpRow*72) + 36 + boardOffset;
-setTimeout(function(){dropAnimation(board[tmpColumn][tmpRow], tmpX, tmpY, 1.2, tmpFinalD)},25);
+	var tmpX = (tmpColumn*72) - 36 + boardOffset;
+	var tmpY = -36;
+	var tmpFinalD = (432-tmpRow*72) + 36 + boardOffset;
+	setTimeout(function(){dropAnimation(board[tmpColumn][tmpRow], tmpX, tmpY, 1.2, tmpFinalD)},25);
 }
 
 
@@ -475,14 +485,15 @@ function aiCheckForWin(tmpBoard, tmpColumn, tmpPlayer)
     }
     tmpRow = tmpRow - 1;
  
-tmpColumn = parseInt(tmpColumn);
+	tmpColumn = parseInt(tmpColumn);
  
-/*
-o###
-#o##
-##o#
-###o
-*/
+	
+	/*	
+		o # # #
+	 	# o # #
+		# # o #
+		# # # o  
+					*/
  
     /* up and to the left */   
     if (tmpColumn >=4 && tmpRow <= 3 ){
@@ -511,12 +522,12 @@ o###
         }   
     }
    
-/*
-###o
-##o#
-#o##
-o###
-*/
+	/*
+		# # # o
+		# # o #
+		# o # #
+		o # # # 
+					*/
  
     /* up and to the right */
     if (tmpColumn <= 4 && tmpRow <= 3){
@@ -546,12 +557,12 @@ o###
         }   
     }
    
-/*
-####
-oooo
-####
-####
-*/
+	/*
+		# # # # 
+		o o o o
+		# # # #
+		# # # # 
+					*/
  
     /* left */
     if (tmpColumn >=4){
@@ -581,12 +592,13 @@ oooo
         }   
     }
  
-/*
-##o##
-##o##
-##o##
-##o##
-*/
+
+	/*
+		# # o # #
+		# # o # #
+		# # o # #
+		# # o # #
+					*/
  
     /* straight down */
     if (tmpRow >= 4){
@@ -618,14 +630,14 @@ function checkForWin(tmpColumn)
     }
     tmpRow = tmpRow - 1;
  
-tmpColumn = parseInt(tmpColumn);
+	tmpColumn = parseInt(tmpColumn);
  
-/*
-o###
-#o##
-##o#
-###o
-*/
+	/*
+		o # # #
+		# o # #
+		# # o #
+		# # # o
+						*/
     /* up and to the left */   
     if (tmpColumn >=4 && tmpRow <= 3 ){
         if (board[tmpColumn-1][tmpRow+1] === whosTurn && board[tmpColumn-2][tmpRow+2] === whosTurn && board[tmpColumn-3][tmpRow+3] === whosTurn){
@@ -654,12 +666,12 @@ o###
         }   
     }
  
-/*
-###o
-##o#
-#o##
-o###
-*/
+	/*
+		# # # o 
+		# # o #
+		# o # #
+		o # # #
+				*/
  
     /* up and to the right */
     if (tmpColumn <= 4 && tmpRow <= 3){
@@ -689,12 +701,12 @@ o###
         }   
     }
    
-/*
-####
-oooo
-####
-####
-*/
+	/*
+		# # # #
+		o o o o
+		# # # #
+		# # # #
+				*/
  
     /* left */
     if (tmpColumn >=4){
@@ -724,13 +736,13 @@ oooo
         }   
     }
  
-/*
-##o##
-##o##
-##o##
-##o##
-*/
- 
+	/*
+		# # o # #
+		# # o # #
+		# # o # #
+		# # o # #
+					*/
+	
     /* straight down */
     if (tmpRow >= 4){
         if (board[tmpColumn][tmpRow-1] === whosTurn && board[tmpColumn][tmpRow-2] === whosTurn && board[tmpColumn][tmpRow-3] === whosTurn){
